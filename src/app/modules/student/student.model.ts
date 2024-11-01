@@ -7,50 +7,24 @@ import {
 } from './student.interface';
 
 const userNameSchema = new Schema<TUSerName>({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  middleName: {
-    type: String,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
+  firstName: { type: String, required: true },
+  middleName: { type: String },
+  lastName: { type: String, required: true },
 });
 
 const guardianSchema = new Schema<TGuardian>({
-  fatherName: {
-    type: String,
-  },
-  fatherOccupation: {
-    type: String,
-  },
-  fatherContactNo: {
-    type: String,
-  },
-  motherName: {
-    type: String,
-  },
-  motherOccupation: {
-    type: String,
-  },
-  motherContactNo: {
-    type: String,
-  },
+  fatherName: { type: String },
+  fatherOccupation: { type: String },
+  fatherContactNo: { type: String },
+  motherName: { type: String },
+  motherOccupation: { type: String },
+  motherContactNo: { type: String },
 });
 
 const localGuardianSchema = new Schema<TLoaclGuardian>({
-  name: {
-    type: String,
-  },
-  occupation: {
-    type: String,
-  },
-  contactNo: {
-    type: String,
-  },
+  name: { type: String },
+  occupation: { type: String },
+  contactNo: { type: String },
 });
 
 const createStudentSchema = new Schema<TStudent>(
@@ -71,7 +45,8 @@ const createStudentSchema = new Schema<TStudent>(
     permanentAddress: { type: String, required: true },
     guardian: guardianSchema,
     localGuardian: localGuardianSchema,
-    isDeleted: { type: Boolean, required: true },
+    isActive: { type: String, enum: ['active', 'blocked'], default: 'active' },
+    isDeleted: { type: Boolean, default: false }
   },
   {
     timestamps: true,

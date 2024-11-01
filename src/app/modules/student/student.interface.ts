@@ -33,5 +33,6 @@ export type TStudent = {
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLoaclGuardian;
+  isActive: 'active' | 'blocked';
   isDeleted: boolean;
 };
