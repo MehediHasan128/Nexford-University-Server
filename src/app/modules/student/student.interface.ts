@@ -29,7 +29,7 @@ export type TStudent = {
   contactNo: string;
   emergencyContactNo: string;
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
-  preasentAddress: string;
+  presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLoaclGuardian;
