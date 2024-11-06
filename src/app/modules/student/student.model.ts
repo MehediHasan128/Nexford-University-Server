@@ -3,6 +3,7 @@ import {
   TGuardian,
   TLoaclGuardian,
   TStudent,
+  TStudentModel,
   TUSerName,
 } from './student.interface';
 
@@ -27,7 +28,7 @@ const localGuardianSchema = new Schema<TLoaclGuardian>({
   contactNo: { type: String },
 });
 
-const createStudentSchema = new Schema<TStudent>(
+const createStudentSchema = new Schema<TStudent, TStudentModel>(
   {
     id: { type: String, required: true },
     name: userNameSchema,
@@ -53,4 +54,19 @@ const createStudentSchema = new Schema<TStudent>(
   },
 );
 
-export const Student = model<TStudent>('student', createStudentSchema);
+
+// Creating for static methods
+createStudentSchema.statics.isUserExists = async function(id: string) {
+  const existingUser = await Student.findOne({id});
+  return existingUser;
+}
+
+
+// Creating for instance methods
+
+// createStudentSchema.methods.isUserExists = async function(id: string){
+//   const existingUser = await Student.findOne({id});
+//   return existingUser;
+// }
+
+export const Student = model<TStudent, TStudentModel>('student', createStudentSchema);

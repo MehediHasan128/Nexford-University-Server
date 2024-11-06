@@ -1,3 +1,5 @@
+import { Model } from "mongoose";
+
 export type TUSerName = {
     firstName: string;
     middleName?: string;
@@ -36,3 +38,19 @@ export type TStudent = {
   isActive: 'active' | 'blocked';
   isDeleted: boolean;
 };
+
+
+// Custom static methods
+export interface TStudentModel extends Model<TStudent> {
+  isUserExists(id: string): Promise<TStudent | null>
+}
+
+
+
+// Custom instance methods
+
+// export type TStudentMethods = {
+//   isUserExists(id: string): Promise<TStudent | null> 
+// }
+
+// export type TStudentModel = Model<TStudent, Record<string, never>, TStudentMethods>
