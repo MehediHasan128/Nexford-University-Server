@@ -3,6 +3,7 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { UserRouter } from './app/modules/user/user.router';
 import globalErrorHandler from './app/middlwares/globalErrorHandler';
+import notFound from './app/middlwares/notFound';
 
 
 const app : Application = express();
@@ -19,6 +20,7 @@ app.get('/', (req : Request, res : Response) => {
 app.use('/api/v1/users', UserRouter)
 
 // Use middlwares
-app.use(globalErrorHandler as (err: any, req: Request, res: Response, next: NextFunction) => void)
+app.use(globalErrorHandler as (err: any, req: Request, res: Response, next: NextFunction) => void);
+app.use(notFound as (req: Request, res: Response, next: NextFunction) => void)
 
 export default app;

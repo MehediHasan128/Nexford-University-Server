@@ -18,10 +18,12 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
+    "@types/http-status": "^0.2.30",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "http-status": "^2.0.0",
     "mongoose": "^8.7.3",
     "ts-node-dev": "^2.0.0",
     "zod": "^3.23.8"
