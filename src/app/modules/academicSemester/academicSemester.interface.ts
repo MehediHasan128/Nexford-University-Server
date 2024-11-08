@@ -1,3 +1,7 @@
+export type TAcademicSemesterNameCodemapper = {
+  [key: string]: string
+}
+
 export type TMonths =
   | 'January'
   | 'February'
