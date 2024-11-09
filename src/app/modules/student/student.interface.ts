@@ -36,6 +36,7 @@ export type TStudent = {
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLoaclGuardian;
+  addmistionSemester: Types.ObjectId;
   isDeleted: boolean;
 };
 
