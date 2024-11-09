@@ -8,7 +8,9 @@ import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import { generatedStudentId } from './user.utils';
+import { generatedFacultyId, generatedStudentId } from './user.utils';
+import { TFaculty } from '../faculty/faculty.interface';
+import { Faculty } from '../faculty/faculty.model';
 
 const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
   // Create a user object
@@ -66,6 +68,36 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
   }
 };
 
+
+const createFacultyUserIntoDB = async(password: string, payload: TFaculty) => {
+  // Create a user object
+  const userData: Partial<TUser> = {};
+
+  // if password is not given use default password
+  userData.password = password || (config.default_faculty_pass as string);
+
+  // Set student role
+  userData.role = 'faculty';
+
+  // Auto generated faculty id
+  const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
+  userData.id = await generatedFacultyId(academicDepartment as TAcademicDepartment);
+
+  // Create user into DB
+  const newUser = await User.create(userData);
+
+  if(Object.keys(newUser).length){
+    payload.user = newUser._id;
+    payload.id = newUser.id;
+
+
+    // Create faculty into DB
+    const newFaculty = await Faculty.create(payload);
+    return newFaculty;
+  }
+}
+
 export const UserServices = {
   createStudentUserIntoDB,
+  createFacultyUserIntoDB
 };
