@@ -1,4 +1,5 @@
 import { TAcademicSemester } from "../academicSemester/academicSemester.interface";
+import { Student } from "../student/student.model";
 import { User } from "./user.model";
 
 
@@ -14,7 +15,13 @@ const findLastStudent = async() => {
 }
 
 
-export const generatedStudentId = async(payload: TAcademicSemester) => {
+const findLastAcademicDepartment = async() => {
+    const lastAcademicDepartment = await Student.findOne({isDeleted: false}, {academicDepartment: 1, _id: 0}).sort({createdAt: -1});
+    return lastAcademicDepartment
+}
+
+
+export const generatedStudentId = async(payload: TAcademicSemester, currentDepartmentId: string) => {
 
     let currentId = (0).toString();
 
@@ -24,7 +31,11 @@ export const generatedStudentId = async(payload: TAcademicSemester) => {
     const currentYear = payload.year;
     const currentSemesterCode = payload.semesterCode;
 
-    if(lastStudentId && lastStudentYear === currentYear && lastStudentSemesterCode === currentSemesterCode){
+    const lastDepartment = await findLastAcademicDepartment();
+    const lastDepartmentID = (lastDepartment?.academicDepartment)?.toString();
+    
+
+    if(lastStudentId && lastStudentYear === currentYear && lastStudentSemesterCode === currentSemesterCode && lastDepartmentID === currentDepartmentId){
         currentId = lastStudentId?.substring(6)
     }
 

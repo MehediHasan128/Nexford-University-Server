@@ -37,6 +37,7 @@ export type TStudent = {
   guardian: TGuardian;
   localGuardian: TLoaclGuardian;
   addmistionSemester: Types.ObjectId;
+  academicDepartment: Types.ObjectId;
   isDeleted: boolean;
 };
 
