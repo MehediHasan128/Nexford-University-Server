@@ -1,3 +1,4 @@
+import { TAcademicDepartment } from "../academicDepartment/academicDepartment.interface";
 import { TAcademicSemester } from "../academicSemester/academicSemester.interface";
 import { Student } from "../student/student.model";
 import { User } from "./user.model";
@@ -21,7 +22,7 @@ const findLastAcademicDepartment = async() => {
 }
 
 
-export const generatedStudentId = async(payload: TAcademicSemester, currentDepartmentId: string) => {
+export const generatedStudentId = async(payload: TAcademicSemester, academicDepartment: TAcademicDepartment, currentDepartmentId: string) => {
 
     let currentId = (0).toString();
 
@@ -36,12 +37,12 @@ export const generatedStudentId = async(payload: TAcademicSemester, currentDepar
     
 
     if(lastStudentId && lastStudentYear === currentYear && lastStudentSemesterCode === currentSemesterCode && lastDepartmentID === currentDepartmentId){
-        currentId = lastStudentId?.substring(6)
+        currentId = lastStudentId?.substring(9)
     }
 
     let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
-    incrementId = `${payload.year}${payload.semesterCode}${incrementId}`;
+    incrementId = `${payload.year}${payload.semesterCode}${academicDepartment.departmentCode}${incrementId}`;
 
     return incrementId;
 

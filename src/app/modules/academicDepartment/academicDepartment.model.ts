@@ -3,6 +3,7 @@ import { TAcademicDepartment } from "./academicDepartment.interface";
 
 const createAcademicDepartmentSchema = new Schema<TAcademicDepartment>({
     departmentName: { type: String, required: true },
+    departmentCode: { type: String, required: true },
     academicFaculty: { type: Schema.Types.ObjectId, required: true }
 });
 

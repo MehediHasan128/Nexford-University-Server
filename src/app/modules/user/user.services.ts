@@ -1,4 +1,6 @@
 import config from "../../config";
+import { TAcademicDepartment } from "../academicDepartment/academicDepartment.interface";
+import { AcademicDepartment } from "../academicDepartment/academicDepartment.model";
 import { TAcademicSemester } from "../academicSemester/academicSemester.interface";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
 import { TStudent } from "../student/student.interface";
@@ -20,8 +22,9 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
     
     // auto denerated student id
     const addmissionSemester = await AcademicSemester.findById(payload.addmistionSemester);
-    const departmentId = (payload.academicDepartment).toString();
-    userData.id = await generatedStudentId(addmissionSemester as TAcademicSemester, departmentId);
+    const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
+    const departmentIdString = (payload.academicDepartment).toString();
+    userData.id = await generatedStudentId(addmissionSemester as TAcademicSemester, academicDepartment as TAcademicDepartment, departmentIdString);
 
     // Create user into DB
     const newUser = await User.create(userData);
