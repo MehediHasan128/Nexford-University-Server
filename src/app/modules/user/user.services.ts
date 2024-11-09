@@ -30,8 +30,12 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
     session.startTransaction();
 
     // auto denerated student id
-    const addmissionSemester = await AcademicSemester.findById(payload.addmistionSemester);
-    const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
+    const addmissionSemester = await AcademicSemester.findById(
+      payload.addmistionSemester,
+    );
+    const academicDepartment = await AcademicDepartment.findById(
+      payload.academicDepartment,
+    );
     const departmentIdString = payload.academicDepartment.toString();
     userData.id = await generatedStudentId(
       addmissionSemester as TAcademicSemester,
@@ -40,36 +44,34 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
     );
 
     // Create user into DB
-    const newUser = await User.create([userData], {session});
+    const newUser = await User.create([userData], { session });
 
     // Create a student (transaction-1)
     if (!newUser.length) {
-        throw new Error('Faild to create user');
+      throw new Error('Faild to create user');
     }
-      payload.id = newUser[0].id;
-      payload.user = newUser[0]._id;
+    payload.id = newUser[0].id;
+    payload.user = newUser[0]._id;
 
-      // Create student into DB (transaction-2)
-      const newStudent = await Student.create([payload], {session});
+    // Create student into DB (transaction-2)
+    const newStudent = await Student.create([payload], { session });
 
-      if(!newStudent){
-        throw new Error('Faild to create student');
-      }
+    if (!newStudent) {
+      throw new Error('Faild to create student');
+    }
 
-      await session.commitTransaction();
-      await session.endSession();
+    await session.commitTransaction();
+    await session.endSession();
 
-      return newStudent;
-      
+    return newStudent;
   } catch (err) {
-      console.log(err);
-      await session.abortTransaction();
-      await session.endSession();
+    console.log(err);
+    await session.abortTransaction();
+    await session.endSession();
   }
 };
 
-
-const createFacultyUserIntoDB = async(password: string, payload: TFaculty) => {
+const createFacultyUserIntoDB = async (password: string, payload: TFaculty) => {
   // Create a user object
   const userData: Partial<TUser> = {};
 
@@ -79,25 +81,41 @@ const createFacultyUserIntoDB = async(password: string, payload: TFaculty) => {
   // Set student role
   userData.role = 'faculty';
 
-  // Auto generated faculty id
-  const academicDepartment = await AcademicDepartment.findById(payload.academicDepartment);
-  userData.id = await generatedFacultyId(academicDepartment as TAcademicDepartment);
+  const session = await startSession();
 
-  // Create user into DB
-  const newUser = await User.create(userData);
+  try {
+    session.startTransaction();
+    // Auto generated faculty id
+    const academicDepartment = await AcademicDepartment.findById(
+      payload.academicDepartment,
+    );
+    userData.id = await generatedFacultyId(
+      academicDepartment as TAcademicDepartment,
+    );
 
-  if(Object.keys(newUser).length){
-    payload.user = newUser._id;
-    payload.id = newUser.id;
+    // Create user into DB
+    const newUser = await User.create([userData], { session });
 
+    if (!newUser.length) {
+      throw new Error('Faild to create faculty');
+    }
+    payload.user = newUser[0]._id;
+    payload.id = newUser[0].id;
 
     // Create faculty into DB
-    const newFaculty = await Faculty.create(payload);
+    const newFaculty = await Faculty.create([payload], { session });
+    await session.commitTransaction();
+    await session.endSession();
+
     return newFaculty;
+  } catch (err) {
+    console.log(err);
+    await session.abortTransaction();
+    await session.endSession();
   }
-}
+};
 
 export const UserServices = {
   createStudentUserIntoDB,
-  createFacultyUserIntoDB
+  createFacultyUserIntoDB,
 };
