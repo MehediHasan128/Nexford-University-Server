@@ -23,8 +23,14 @@ const getSingleSemesterById = async (id: string) => {
   return data;
 }
 
+const updateAcademicSemester = async(id: string, payload: Partial<TAcademicSemester>) => {
+  const data = await AcademicSemester.findByIdAndUpdate(id, payload, {new: true});
+  return data;
+}
+
 export const AcademicSemesterServices = {
   createAcademicSemesterIntoDB,
   getAllAcademicSemesterFromDB,
-  getSingleSemesterById
+  getSingleSemesterById,
+  updateAcademicSemester
 };

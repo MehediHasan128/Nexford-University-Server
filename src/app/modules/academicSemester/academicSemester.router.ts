@@ -20,4 +20,7 @@ router.get('/academic-semester', AcademicSemesterController.getAllAcademicSemest
 // Get singel academic semster using id
 router.get('/:id', AcademicSemesterController.getSingleSemester);
 
+// Upadate academic semester
+router.patch('/:semesterId', AcademicSemesterController.updateAcademicSemster);
+
 export const AcademicSemesterRoutes = router;

@@ -7,6 +7,14 @@ const createAcademicFacultyValidationSchema = z.object({
 });
 
 
+const updateAcademicFacultyValidationSchema = z.object({
+    body: z.object({
+        facultyName: z.string()
+    })
+});
+
+
 export const AcademicFacultyValidation = {
-    createAcademicFacultyValidationSchema
+    createAcademicFacultyValidationSchema,
+    updateAcademicFacultyValidationSchema
 }
