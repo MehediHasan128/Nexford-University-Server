@@ -11,6 +11,8 @@ import { User } from './user.model';
 import { generatedFacultyId, generatedStudentId } from './user.utils';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
 
 const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
   // Create a user object
@@ -48,7 +50,7 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
 
     // Create a student (transaction-1)
     if (!newUser.length) {
-      throw new Error('Faild to create user');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Faild to create user');
     }
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
@@ -57,7 +59,7 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
     const newStudent = await Student.create([payload], { session });
 
     if (!newStudent) {
-      throw new Error('Faild to create student');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Faild to create student');
     }
 
     await session.commitTransaction();
@@ -97,7 +99,7 @@ const createFacultyUserIntoDB = async (password: string, payload: TFaculty) => {
     const newUser = await User.create([userData], { session });
 
     if (!newUser.length) {
-      throw new Error('Faild to create faculty');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Faild to create faculty');
     }
     payload.user = newUser[0]._id;
     payload.id = newUser[0].id;
