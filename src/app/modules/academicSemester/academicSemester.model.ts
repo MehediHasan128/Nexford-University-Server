@@ -28,6 +28,17 @@ createAcademicSemesterSchema.pre('save', async function(next){
     throw new Error('Semester is already exists')
   };
   next();
+});
+
+
+createAcademicSemesterSchema.pre('findOneAndUpdate', async function(next) {
+  const query = this.getQuery();
+  const isExistsAcademicSemester = await AcademicSemester.findById(query._id);
+  
+  if(!isExistsAcademicSemester){
+    throw new Error("This is academic semester dose not exists!")
+  };
+  next();
 })
 
 
