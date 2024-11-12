@@ -1,18 +1,18 @@
-import { startSession } from 'mongoose';
 import config from '../../config';
-import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
-import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
-import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
-import { AcademicSemester } from '../academicSemester/academicSemester.model';
-import { TStudent } from '../student/student.interface';
-import { Student } from '../student/student.model';
-import { TUser } from './user.interface';
 import { User } from './user.model';
-import { generatedFacultyId, generatedStudentId } from './user.utils';
-import { TFaculty } from '../faculty/faculty.interface';
-import { Faculty } from '../faculty/faculty.model';
-import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
+import { startSession } from 'mongoose';
+import { TUser } from './user.interface';
+import AppError from '../../errors/AppError';
+import { Faculty } from '../faculty/faculty.model';
+import { Student } from '../student/student.model';
+import { TFaculty } from '../faculty/faculty.interface';
+import { TStudent } from '../student/student.interface';
+import { generatedFacultyId, generatedStudentId } from './user.utils';
+import { AcademicSemester } from '../academicSemester/academicSemester.model';
+import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
+import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
+import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 
 const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
   // Create a user object

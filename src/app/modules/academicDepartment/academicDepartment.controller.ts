@@ -1,7 +1,7 @@
+import httpStatus from 'http-status';
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponce";
 import { AcademicDepartmentServices } from "./academicDepartment.services";
-import httpStatus from 'http-status';
 
 const createAcademicDepartment = catchAsync(async(req, res) => {
     const academicDepartmentData = req.body;

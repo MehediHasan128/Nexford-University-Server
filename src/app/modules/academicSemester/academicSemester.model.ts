@@ -1,10 +1,8 @@
-import { model, Schema } from 'mongoose';
 import httpStatus from 'http-status';
-import {
-  TAcademicSemester,
-} from './academicSemester.interface';
-import { academicSemesterCode, academicSemesterName, Months } from './academicSemester.constant';
+import { model, Schema } from 'mongoose';
 import AppError from '../../errors/AppError';
+import { TAcademicSemester } from './academicSemester.interface';
+import { academicSemesterCode, academicSemesterName, Months } from './academicSemester.constant';
 
 const createAcademicSemesterSchema = new Schema<TAcademicSemester>(
   {

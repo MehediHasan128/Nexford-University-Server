@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { model, Schema } from "mongoose";
-import { TUser } from "./user.interface";
 import bcrypt from 'bcrypt';
 import config from "../../config";
+import { model, Schema } from "mongoose";
+import { TUser } from "./user.interface";
 
 const createUserSchema = new Schema<TUser>({
     id: {

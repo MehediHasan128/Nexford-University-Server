@@ -1,7 +1,7 @@
-import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
-import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
-import { Student } from '../student/student.model';
 import { User } from './user.model';
+import { Student } from '../student/student.model';
+import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
+import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 
 const findLastUser = async (UserRole: string) => {
   const lastUser = await User.findOne(
