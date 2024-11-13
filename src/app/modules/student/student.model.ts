@@ -6,6 +6,8 @@ import {
   TStudentModel,
   TUSerName,
 } from './student.interface';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
 
 const userNameSchema = new Schema<TUSerName>({
   firstName: { type: String, required: true },
@@ -70,5 +72,19 @@ createStudentSchema.statics.isUserExists = async function(id: string) {
 //   const existingUser = await Student.findOne({id});
 //   return existingUser;
 // }
+
+
+// Check a student is exist or not
+createStudentSchema.pre('findOneAndUpdate', async function(next){
+  const query = this.getQuery();
+  
+  const isExistsStudent = await Student.findOne({id: query.id});
+
+  if(!isExistsStudent){
+    throw new AppError(httpStatus.BAD_REQUEST, "This student dose not exists on data base!")
+  };
+
+  next();
+})
 
 export const Student = model<TStudent, TStudentModel>('student', createStudentSchema);
