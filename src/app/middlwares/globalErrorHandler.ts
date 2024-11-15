@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
@@ -8,16 +9,18 @@ import handelZodError from "../errors/handelZodError";
 import handelValidationError from "../errors/handelValidationError";
 import handelCastError from "../errors/handelCastError";
 import handelDuplicateError from "../errors/handelDuplicateError";
+import AppError from "../errors/AppError";
 
 const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-    let statusCode = err.statusCode || 500;
-    let message = err.message || 'Something went wrong';
+    let statusCode = 500;
+    let message = 'Something went wrong';
     let errorSources: TErrorSources = [{
         path: '',
         message: 'Something went wrong'
     }];
 
 
+    
     if(err instanceof ZodError){
         const simplifiedError = handelZodError(err);
         statusCode = simplifiedError.statusCode;
@@ -38,6 +41,19 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
         statusCode = simplifiedError.statusCode;
         message = simplifiedError.message;
         errorSources = simplifiedError.errorSources;
+    }else if(err instanceof AppError){
+        statusCode = err?.statusCode,
+        message = err?.message,
+        errorSources = [{
+            path: '',
+            message: err?.message
+        }]
+    }else if(err instanceof Error){
+        message = err.message;
+        errorSources = [{
+            path: '',
+            message: err.message
+        }]
     }
 
 
