@@ -81,7 +81,7 @@ createStudentSchema.pre('findOneAndUpdate', async function(next){
   const isExistsStudent = await Student.findOne({id: query.id});
 
   if(!isExistsStudent){
-    throw new AppError(httpStatus.BAD_REQUEST, "This student dose not exists on data base!")
+    throw new AppError(httpStatus.NOT_FOUND, "This student dose not exists on data base!")
   };
 
   next();

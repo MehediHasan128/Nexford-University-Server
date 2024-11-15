@@ -38,7 +38,7 @@ createAcademicSemesterSchema.pre('findOneAndUpdate', async function(next) {
   const isExistsAcademicSemester = await AcademicSemester.findById(query._id);
   
   if(!isExistsAcademicSemester){
-    throw new AppError(httpStatus.BAD_REQUEST, "This is academic semester dose not exists!")
+    throw new AppError(httpStatus.NOT_FOUND, "This is academic semester dose not exists!")
   };
   next();
 })

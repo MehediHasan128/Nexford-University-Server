@@ -4,7 +4,7 @@ import AppError from "../../errors/AppError";
 import { TAcademicDepartment } from "./academicDepartment.interface";
 
 const createAcademicDepartmentSchema = new Schema<TAcademicDepartment>({
-    departmentName: { type: String, required: true },
+    departmentName: { type: String, required: true, unique: true },
     departmentCode: { type: String, required: true },
     academicFaculty: { type: Schema.Types.ObjectId, required: true, ref: 'academicFaculties' }
 });
@@ -12,7 +12,7 @@ const createAcademicDepartmentSchema = new Schema<TAcademicDepartment>({
 createAcademicDepartmentSchema.pre('save', async function(next){
     const departmentExists = await AcademicDepartment.findOne({departmentName: this.departmentName});
     if(departmentExists){
-        throw new AppError(httpStatus.BAD_REQUEST, "Department is already exists");
+        throw new AppError(httpStatus.NOT_FOUND, "Department is already exists");
     };
     next();
 })
