@@ -6,6 +6,7 @@ import { TErrorSources } from "../interface/error";
 import config from "../config";
 import handelZodError from "../errors/handelZodError";
 import handelValidationError from "../errors/handelValidationError";
+import handelCastError from "../errors/handelCastError";
 
 const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     let statusCode = err.statusCode || 500;
@@ -23,6 +24,11 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
         errorSources = simplifiedError.errorSources
     }else if(err?.name === 'ValidationError'){
         const simplifiedError = handelValidationError(err);
+        statusCode = simplifiedError.statusCode;
+        message = simplifiedError.message;
+        errorSources = simplifiedError.errorSources;
+    }else if(err?.name === 'CastError'){
+        const simplifiedError = handelCastError(err);
         statusCode = simplifiedError.statusCode;
         message = simplifiedError.message;
         errorSources = simplifiedError.errorSources;
