@@ -7,6 +7,7 @@ import config from "../config";
 import handelZodError from "../errors/handelZodError";
 import handelValidationError from "../errors/handelValidationError";
 import handelCastError from "../errors/handelCastError";
+import handelDuplicateError from "../errors/handelDuplicateError";
 
 const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     let statusCode = err.statusCode || 500;
@@ -29,6 +30,11 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
         errorSources = simplifiedError.errorSources;
     }else if(err?.name === 'CastError'){
         const simplifiedError = handelCastError(err);
+        statusCode = simplifiedError.statusCode;
+        message = simplifiedError.message;
+        errorSources = simplifiedError.errorSources;
+    }else if(err?.code === 11000){
+        const simplifiedError = handelDuplicateError(err);
         statusCode = simplifiedError.statusCode;
         message = simplifiedError.message;
         errorSources = simplifiedError.errorSources;
