@@ -74,3 +74,8 @@ export const generatedFacultyId = async (payload: TAcademicDepartment) => {
   incrementId = `Fa-${currentYear}${payload.departmentCode}${incrementId}`;
   return incrementId;
 };
+
+export const generatedAdminId = async (payload: TAcademicDepartment) => {
+  const id = `A-${payload.departmentCode}`;
+  return id;
+}
