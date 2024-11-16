@@ -30,7 +30,11 @@ class QueryBuilder<T> {
     const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
     excludeFields.forEach((element) => delete queryObj[element]);
 
-    this.queryModel = this.queryModel.find(queryObj as FilterQuery<T>);
+    this.queryModel = this.queryModel.find(queryObj as FilterQuery<T>).populate({
+      path: 'academicDepartment',
+      populate: { path: 'academicFaculty' },
+    })
+    .populate('addmistionSemester');;
 
     return this;
   }

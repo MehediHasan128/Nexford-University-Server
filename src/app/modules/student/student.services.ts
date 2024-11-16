@@ -32,11 +32,11 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   // const filterQuery = searchQuery
   //   .find(queryObj)
-  //   .populate({
-  //     path: 'academicDepartment',
-  //     populate: { path: 'academicFaculty' },
-  //   })
-  //   .populate('addmistionSemester');
+    // .populate({
+    //   path: 'academicDepartment',
+    //   populate: { path: 'academicFaculty' },
+    // })
+    // .populate('addmistionSemester');
 
   // sorting
   // let sort = '-createdAt';
