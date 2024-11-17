@@ -29,16 +29,4 @@ const createAdminSchema = new Schema<TAdmin>({
 });
 
 
-// createAdminSchema.pre('save', async function(next){
-//     const isAdminExists = await Admin.findOne({managementDepartment: this.managementDepartment});
-//     console.log(isAdminExists);
-    
-//     if(isAdminExists){
-//         throw new AppError(httpStatus.CONFLICT, 'This department already has an assigned admin.')
-//     };
-
-//     next();
-// })
-
-
 export const Admin = model<TAdmin>('admin', createAdminSchema);

@@ -1,0 +1,1 @@
+export const adminSearchableFields = ['id', 'email', 'name.firstName'];
