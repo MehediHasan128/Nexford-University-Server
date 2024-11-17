@@ -1,5 +1,7 @@
 import { model, Schema } from "mongoose";
 import { TAdmin, TUserName } from "./admin.interface";
+// import AppError from "../../errors/AppError";
+// import httpStatus from 'http-status';
 
 const UserNameSchema = new Schema<TUserName>({
     firstName: { type: String, required: [true, 'First name is required'] },
@@ -25,6 +27,18 @@ const createAdminSchema = new Schema<TAdmin>({
 }, {
     timestamps: true
 });
+
+
+// createAdminSchema.pre('save', async function(next){
+//     const isAdminExists = await Admin.findOne({managementDepartment: this.managementDepartment});
+//     console.log(isAdminExists);
+    
+//     if(isAdminExists){
+//         throw new AppError(httpStatus.CONFLICT, 'This department already has an assigned admin.')
+//     };
+
+//     next();
+// })
 
 
 export const Admin = model<TAdmin>('admin', createAdminSchema);

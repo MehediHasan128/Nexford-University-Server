@@ -27,7 +27,7 @@ createAcademicSemesterSchema.pre('save', async function(next){
   });
 
   if(existingSemester){
-    throw new AppError(httpStatus.BAD_REQUEST, 'Semester is already exists')
+    throw new AppError(httpStatus.CONFLICT, 'Semester is already exists')
   };
   next();
 });

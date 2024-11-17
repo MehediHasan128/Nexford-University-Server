@@ -13,15 +13,16 @@ const userNameValidationSchema = z.object({
     .max(10, { message: 'Last name must be less then 10 characters' }),
 });
 
-const createAdminValidationSchema = z.object({
+const createFacultyValidationSchema = z.object({
   body: z.object({
     password: z
       .string({ invalid_type_error: 'Password must be string' })
       .min(8, 'Password must be at least 8 characters long')
       .max(20, 'Password cant not more than 20 characters')
       .optional(),
-    admin: z.object({
+    faculty: z.object({
       name: userNameValidationSchema,
+      designation: z.string(),
       gender: z.enum(['male', 'female']),
       email: z.string().email({ message: 'Invalid email address' }),
       dateOfBirth: z.string().datetime({ message: 'Date must be UTC' }),
@@ -32,12 +33,10 @@ const createAdminValidationSchema = z.object({
         .optional(),
       presentAddress: z.string(),
       permanentAddress: z.string(),
-      managementDepartment: z.string(),
+      academicDepartment: z.string(),
       isDeleted: z.boolean().default(false),
     }),
   }),
 });
 
-export const AdminValidation = {
-    createAdminValidationSchema
-};
+export const FacultyValidation = { createFacultyValidationSchema };
