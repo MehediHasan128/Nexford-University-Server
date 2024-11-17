@@ -15,6 +15,21 @@ const getAllAdmin = catchAsync(async(req, res) => {
 });
 
 
+const getAdminById = catchAsync(async(req, res) => {
+    const {adminId} = req.params;
+
+    const data = await AdminServices.getSigleAdminFromDB(adminId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Get admin successfully',
+        data: data,
+      });
+})
+
+
 export const AdminController = {
-    getAllAdmin
+    getAllAdmin,
+    getAdminById
 }

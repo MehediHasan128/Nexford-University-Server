@@ -5,5 +5,6 @@ const router = express.Router();
 
 // Get all student
 router.get('/', AdminController.getAllAdmin);
+router.get('/:adminId', AdminController.getAdminById);
 
 export const AdminRoutes = router;
