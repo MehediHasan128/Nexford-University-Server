@@ -32,11 +32,11 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   // const filterQuery = searchQuery
   //   .find(queryObj)
-    // .populate({
-    //   path: 'academicDepartment',
-    //   populate: { path: 'academicFaculty' },
-    // })
-    // .populate('addmistionSemester');
+  // .populate({
+  //   path: 'academicDepartment',
+  //   populate: { path: 'academicFaculty' },
+  // })
+  // .populate('addmistionSemester');
 
   // sorting
   // let sort = '-createdAt';
@@ -59,9 +59,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   //   skip = (page-1)*limit;
   // };
 
-
   // const paginateQuery = sortedQuery.skip(skip);
-
 
   // const limitQuery = paginateQuery.limit(limit);
 
@@ -74,8 +72,20 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   // return data;
 
-
-  const StudentQuery = new QueryBuilder(Student.find(), query).search(studentSearchableFields).filter().sort().paginate().fields();
+  const StudentQuery = new QueryBuilder(
+    Student.find()
+      .populate({
+        path: 'academicDepartment',
+        populate: { path: 'academicFaculty' },
+      })
+      .populate('addmistionSemester'),
+    query,
+  )
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
   const data = await StudentQuery.queryModel;
   return data;
