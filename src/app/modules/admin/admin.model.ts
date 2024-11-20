@@ -1,7 +1,5 @@
 import { model, Schema } from "mongoose";
 import { TAdmin, TUserName } from "./admin.interface";
-import AppError from "../../errors/AppError";
-import httpStatus from 'http-status';
 
 const UserNameSchema = new Schema<TUserName>({
     firstName: { type: String, required: [true, 'First name is required'] },
@@ -27,16 +25,6 @@ const createAdminSchema = new Schema<TAdmin>({
 }, {
     timestamps: true
 });
-
-
-createAdminSchema.pre('findOne', async function(next) {
-    const query = this.getQuery();
-    const isAdminExists = await Admin.find({id: query.id});
-    if(isAdminExists.length === 0){
-        throw new AppError(httpStatus.NOT_FOUND, 'Admin not found in the database!')
-    }
-    next();
-})
 
 
 export const Admin = model<TAdmin>('admin', createAdminSchema);

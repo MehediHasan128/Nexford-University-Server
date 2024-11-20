@@ -148,6 +148,11 @@ const createAdminUserIntoDB = async (password: string, payload: TAdmin) => {
     // Set id
     userData.id = adminId;
 
+    const isAdmin = await User.findOne({id: adminId});
+    if(isAdmin){
+      throw new AppError(httpStatus.CONFLICT, 'Wrong')
+    }
+
     // Create admin user (transaction-1)
     const newUser = await User.create([userData], { session });
 
