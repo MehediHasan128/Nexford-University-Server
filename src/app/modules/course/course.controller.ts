@@ -16,7 +16,7 @@ const createCourse = catchAsync(async (req, res) => {
 });
 
 const getAllCourse = catchAsync(async (req, res) => {
-  const data = await CourseServices.getAllCourseFromDB();
+  const data = await CourseServices.getAllCourseFromDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -48,7 +48,7 @@ const updateSingleCourse = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Update course successfully',
+    message: 'Course is update successfully',
     data: data,
   });
 });

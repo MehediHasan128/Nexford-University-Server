@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 import { TCourse, TPreRequisiteCourse } from './course.interface';
 
 const preRequisiteCourseSchema = new Schema<TPreRequisiteCourse>({
-  course: { type: Schema.Types.ObjectId },
+  course: { type: Schema.Types.ObjectId, ref: 'course' },
   isDeleted: { type: Boolean, default: false },
 });
 
