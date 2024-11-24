@@ -3,8 +3,8 @@ import { Types } from "mongoose"
 export type TSemesterRegistration = {
     academicSemester: Types.ObjectId;
     status: 'UPCOMING' | 'ONGOING' | 'ENDED';
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     minCredits: number;
     maxCredits: number;
 }
