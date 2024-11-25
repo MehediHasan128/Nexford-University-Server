@@ -3,6 +3,11 @@ import { TOfferedCourse } from './offeredCourse.interface';
 import { days } from './offeredCourse.constant';
 
 const createOfferedCourseSchema = new Schema<TOfferedCourse>({
+  semesterRegistration: {
+    type: Schema.Types.ObjectId,
+    ref: 'SemesterRegistration',
+    required: [true, 'Registered semester is required.'],
+  },
   academicSemester: {
     type: Schema.Types.ObjectId,
     ref: 'AcademicSemester',
@@ -38,11 +43,11 @@ const createOfferedCourseSchema = new Schema<TOfferedCourse>({
     required: [true, 'Student capacity is required.'],
     min: [20, 'Student capacity must be at least 20.'],
   },
-  classSchedule: {
+  classSchedule: [{
     type: String,
     enum: days,
     required: [true, 'Class schedule is required.'],
-  },
+  }],
   startTime: {
     type: String,
     required: [true, 'Start time is required.']

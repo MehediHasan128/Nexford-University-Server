@@ -2,14 +2,15 @@ import { Types } from "mongoose"
 import { TDays } from "./offeredCourse.constant";
 
 export type TOfferedCourse = {
-    academicSemester: Types.ObjectId;
+    semesterRegistration: Types.ObjectId;
+    academicSemester: Types.ObjectId | undefined;
     academicFaculty: Types.ObjectId;
     academicDepartment: Types.ObjectId;
     course: Types.ObjectId;
     faculty: Types.ObjectId;
     section: string;
     studentCapacity: number;
-    classSchedule: TDays;
+    classSchedule: TDays[];
     startTime: string;
     endTime: string;
 }
