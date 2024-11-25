@@ -10,7 +10,7 @@ import httpStatus from 'http-status';
 
 const createOfferedCourseIntoDB = async(payload: TOfferedCourse) => {
 
-    const {semesterRegistration, academicFaculty, academicDepartment, course, faculty} = payload;
+    const {semesterRegistration, academicFaculty, academicDepartment, course, faculty, section} = payload;
 
     const isRegisteredSemesterExists = await SemesterRegistration.findById(semesterRegistration);
     if(!isRegisteredSemesterExists){
@@ -38,6 +38,28 @@ const createOfferedCourseIntoDB = async(payload: TOfferedCourse) => {
     };
 
     payload.academicSemester = isRegisteredSemesterExists.academicSemester;
+
+    // check if department is belong to faculty
+    const isDepartmentBelongToFaculty = await AcademicDepartment.findOne({
+        academicFaculty,
+        _id: academicDepartment
+    });
+
+    if(!isDepartmentBelongToFaculty){
+        throw new AppError(httpStatus.NOT_FOUND, `${isacademicDepartmentExists.departmentName} is not belong to ${isacademicFacultyExists.facultyName}`)
+    };
+
+    // check if the samne course same section in same registered semester exists
+    const isSameCourseExistsWithSameSemesterWithSameSection = await OfferedCourse.findOne({
+        semesterRegistration,
+        course,
+        section
+    });
+
+    if(isSameCourseExistsWithSameSemesterWithSameSection){
+        throw new AppError(httpStatus.BAD_REQUEST, `This course is already assign in section ${section}`)
+    }
+
 
     const data = await OfferedCourse.create(payload);
     return data;
