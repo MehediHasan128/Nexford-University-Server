@@ -10,7 +10,7 @@ import httpStatus from 'http-status';
 
 const createOfferedCourseIntoDB = async(payload: TOfferedCourse) => {
 
-    const {semesterRegistration, academicFaculty, academicDepartment, course, faculty, section} = payload;
+    const {semesterRegistration, academicFaculty, academicDepartment, course, faculty, section, classSchedule, startTime, endTime} = payload;
 
     const isRegisteredSemesterExists = await SemesterRegistration.findById(semesterRegistration);
     if(!isRegisteredSemesterExists){
@@ -52,13 +52,38 @@ const createOfferedCourseIntoDB = async(payload: TOfferedCourse) => {
     // check if the samne course same section in same registered semester exists
     const isSameCourseExistsWithSameSemesterWithSameSection = await OfferedCourse.findOne({
         semesterRegistration,
-        course,
+        course, 
         section
     });
 
     if(isSameCourseExistsWithSameSemesterWithSameSection){
         throw new AppError(httpStatus.BAD_REQUEST, `This course is already assign in section ${section}`)
     }
+
+
+    // get the schedules of the faculties
+    const assignedSchedules = await OfferedCourse.find({
+        course,
+        faculty,
+        classSchedule: {$in: classSchedule}
+    }).select('classSchedule startTime endTime');
+    
+    const newSchedule = {
+        classSchedule,
+        startTime,
+        endTime
+    };
+
+    assignedSchedules.forEach((schedule) => {
+        const existingStartTime = new Date(`1970-01-01T${schedule.startTime}`);
+        const existingEndTime = new Date(`1970-01-01T${schedule.endTime}`);
+        const newStartTime = new Date(`1970-01-01T${newSchedule.startTime}`);
+        const newEndTime = new Date(`1970-01-01T${newSchedule.endTime}`);
+
+        if(newStartTime < existingEndTime && newEndTime > existingStartTime){
+            throw new AppError(httpStatus.CONFLICT, `This faculty is not avaiable at that time! Chose another time or day`)
+        }
+    })
 
 
     const data = await OfferedCourse.create(payload);
