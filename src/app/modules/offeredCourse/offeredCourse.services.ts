@@ -7,6 +7,7 @@ import { SemesterRegistration } from "../semesterRegistration/semesterRegistrati
 import { TOfferedCourse } from "./offeredCourse.interface"
 import { OfferedCourse } from "./offeredCourse.model"
 import httpStatus from 'http-status';
+import { hasTimeConflict } from "./offeredCourse.utils";
 
 const createOfferedCourseIntoDB = async(payload: TOfferedCourse) => {
 
@@ -74,16 +75,9 @@ const createOfferedCourseIntoDB = async(payload: TOfferedCourse) => {
         endTime
     };
 
-    assignedSchedules.forEach((schedule) => {
-        const existingStartTime = new Date(`1970-01-01T${schedule.startTime}`);
-        const existingEndTime = new Date(`1970-01-01T${schedule.endTime}`);
-        const newStartTime = new Date(`1970-01-01T${newSchedule.startTime}`);
-        const newEndTime = new Date(`1970-01-01T${newSchedule.endTime}`);
-
-        if(newStartTime < existingEndTime && newEndTime > existingStartTime){
-            throw new AppError(httpStatus.CONFLICT, `This faculty is not avaiable at that time! Chose another time or day`)
-        }
-    })
+    if(hasTimeConflict(assignedSchedules, newSchedule)){
+        throw new AppError(httpStatus.CONFLICT, `This faculty is not avaiable at that time! Chose another time or day`)
+    }
 
 
     const data = await OfferedCourse.create(payload);
@@ -95,6 +89,9 @@ const getAllOfferedCourseFromDB = async() => {
     const data = await OfferedCourse.find().populate('academicSemester').populate('academicFaculty').populate('academicDepartment').populate('course').populate('faculty');
     return data;
 }
+
+
+
 
 
 
