@@ -78,12 +78,38 @@ const updateOfferedCourseValidationSchema = z.object({
 
     studentCapacity: z.number().optional(),
 
-    classSchedule: z.enum([...days] as [string, ...string[]]).optional(),
+    classSchedule: z.array(
+      z.enum([...days] as [string, ...string[]], {
+        message: 'Class schedule is required.',
+      }),
+    ).optional(),
 
-    startTime: z.string().optional(),
+    startTime: z
+      .string({
+        required_error: 'Start time is required.',
+      })
+      .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+        message: 'Start time must be in HH:mm format.',
+      }).optional(),
 
-    endTime: z.string().optional(),
-  }),
+    endTime: z
+      .string({
+        required_error: 'End time is required.',
+      })
+      .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+        message: 'End time must be in HH:mm format.',
+      }).optional(),
+  }).refine(
+    (body) => {
+        const start = new Date(`1970-01-01T${body.startTime}:00`);
+        const end = new Date(`1970-01-01T${body.endTime}:00`);
+
+        return end > start;
+    },
+    {
+        message: 'Start time should be before End time!'
+    }
+  )
 });
 
 export const OfferedCourseValidation = {
