@@ -1,10 +1,11 @@
 import express from 'express';
 import { StudentController } from './student.controller';
+import auth from '../../middlwares/auth';
 
 const router = express.Router();
 
 // Get all student
-router.get('/', StudentController.getAllStudent);
+router.get('/', auth(), StudentController.getAllStudent);
 
 // Get single student
 router.get('/:studentId', StudentController.getSingleStudent);
