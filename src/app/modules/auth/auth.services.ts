@@ -1,14 +1,14 @@
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model"
-import { TUserLogin } from "./auth.interface"
+import { TChangePassword, TUserLogin } from "./auth.interface"
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from "../../config";
 
 const loginUser = async(payload: TUserLogin) => {
     // Check the user is exists on database
-    const isUserExists = await User.findOne({id: payload?.id});
+    const isUserExists = await User.findOne({id: payload?.id}).select('+password');
     if(!isUserExists){
         throw new AppError(httpStatus.NOT_FOUND, 'This user not found!')
     }
@@ -45,6 +45,32 @@ const loginUser = async(payload: TUserLogin) => {
     }
 }
 
+const changeUserPassword = async(userData: JwtPayload, payload: TChangePassword) => {
+
+    // Checking if ther user is exist on database
+    const user = await User.findOne({id: userData?.userId}).select('+password');
+    if(!user){
+        throw new AppError(httpStatus.NOT_FOUND, 'This user not found!')
+    }
+    const userOldPassword = user?.password;
+    
+    // Check the old password is correct or not
+    const isOldPasswordCorrect = await bcrypt.compare(payload?.oldPassword, userOldPassword);
+    if(!isOldPasswordCorrect){
+        throw new AppError(httpStatus.BAD_REQUEST, 'The old password you entered is incorrect. Please try again.')
+    }
+
+    const newPassword = await bcrypt.hash(payload?.newPassword, Number(config.bcrypt_salt_round));
+    console.log('new pass', newPassword);
+
+    const data = await User.findOneAndUpdate({
+        id: userData?.userId,
+        role: userData?.role
+    }, {password: newPassword}, {new: true});
+    return data
+}
+
 export const AuthServices = {
-    loginUser
+    loginUser,
+    changeUserPassword
 }
