@@ -1,3 +1,5 @@
+import { userRole } from "./user.constant";
+
 export type TUser = {
     id: string;
     password: string;
@@ -6,3 +8,5 @@ export type TUser = {
     status: 'active' | 'blocked';
     isDeleted: boolean;
 }
+
+export type TUserRole = keyof typeof userRole;

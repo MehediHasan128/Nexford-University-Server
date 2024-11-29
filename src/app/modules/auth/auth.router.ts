@@ -10,5 +10,6 @@ router.post(
   validateRequest(AuthValidation.createLoginValidationSchema),
   AuthController.loginUserIntoDB
 );
+router.post('/change-password')
 
 export const AuthRoutes = router;

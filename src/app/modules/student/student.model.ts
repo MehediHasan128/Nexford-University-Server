@@ -33,7 +33,7 @@ const localGuardianSchema = new Schema<TLoaclGuardian>({
 const createStudentSchema = new Schema<TStudent, TStudentModel>(
   {
     id: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, required: [true, 'User id is required'], unique: true, ref: 'User' },
+    user: { type: Schema.Types.ObjectId, required: [true, 'User id is required'], unique: true, ref: 'user' },
     name: userNameSchema,
     gender: { type: String, enum: ['male', 'female'], required: true },
     email: { type: String, required: true },

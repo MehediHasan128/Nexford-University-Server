@@ -14,6 +14,7 @@ const createUserSchema = new Schema<TUser>(
     },
     password: {
       type: String,
+      select: 0
     },
     needsPasswordChange: {
       type: Boolean,
