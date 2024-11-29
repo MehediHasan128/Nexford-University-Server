@@ -6,6 +6,7 @@ import { StudentServices } from "./student.services";
 const getAllStudent = catchAsync(async(req, res) => {
 
     const data = await StudentServices.getAllStudentFromDB(req.query);
+    console.log('This is cookie', req.cookies);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,

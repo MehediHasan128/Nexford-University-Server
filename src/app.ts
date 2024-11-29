@@ -4,12 +4,14 @@ import cors from 'cors';
 import globalErrorHandler from './app/middlwares/globalErrorHandler';
 import notFound from './app/middlwares/notFound';
 import router from './app/routes';
+import cookieParser from 'cookie-parser';
 
 const app: Application = express();
 
 // Perser
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin: ['http://localhost:5173']}));
+app.use(cookieParser());
 
 
 const test = async(res: Response) => {

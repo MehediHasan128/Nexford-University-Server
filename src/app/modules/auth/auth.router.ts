@@ -12,6 +12,8 @@ router.post(
   validateRequest(AuthValidation.createLoginValidationSchema),
   AuthController.loginUserIntoDB
 );
-router.post('/change-password', auth(userRole.admin, userRole.faculty, userRole.student), validateRequest(AuthValidation.changePasswordValidationSchema), AuthController.changePassword)
+router.post('/change-password', auth(userRole.admin, userRole.faculty, userRole.student), validateRequest(AuthValidation.changePasswordValidationSchema), AuthController.changePassword);
+
+router.post('/refresh-token', validateRequest(AuthValidation.refreshTokenValidationSchema), AuthController.refreshToken);
 
 export const AuthRoutes = router;
