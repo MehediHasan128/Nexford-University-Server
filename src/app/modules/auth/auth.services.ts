@@ -61,12 +61,11 @@ const changeUserPassword = async(userData: JwtPayload, payload: TChangePassword)
     }
 
     const newPassword = await bcrypt.hash(payload?.newPassword, Number(config.bcrypt_salt_round));
-    console.log('new pass', newPassword);
 
     const data = await User.findOneAndUpdate({
         id: userData?.userId,
         role: userData?.role
-    }, {password: newPassword}, {new: true});
+    }, {password: newPassword, needsPasswordChange: false, passwordChangeAt: new Date()}, {new: true});
     return data
 }
 
