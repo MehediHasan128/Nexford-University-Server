@@ -3,8 +3,9 @@ import { User } from "../user/user.model"
 import { TChangePassword, TUserLogin } from "./auth.interface"
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import config from "../../config";
+import { createAccessOrRefreshToken } from "./auth.utils";
 
 const loginUser = async(payload: TUserLogin) => {
     // Check the user is exists on database
@@ -37,10 +38,13 @@ const loginUser = async(payload: TUserLogin) => {
         role: isUserExists?.role
     }
 
-    const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret_token as string, {expiresIn: '30d'});
+ 
+    const accessToken = createAccessOrRefreshToken(jwtPayload, config.bcrypt_salt_round as string, config.jwt_access_expires_in as string);
+    const refreshToken = createAccessOrRefreshToken(jwtPayload, config.bcrypt_salt_round as string, config.jwt_refresh_expires_in as string);
     
     return {
         accessToken,
+        refreshToken,
         needsPasswordChange: isUserExists.needsPasswordChange
     }
 }
