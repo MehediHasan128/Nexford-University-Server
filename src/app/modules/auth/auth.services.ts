@@ -87,8 +87,6 @@ const refreshToken = async(token: string) => {
         userId,
         role
     }
-
-    console.log('refresh', decoded);
   
       // Check the user is exists on database
       const isUserExists = await User.findOne({id: userId}).select('+password');
@@ -113,10 +111,46 @@ const refreshToken = async(token: string) => {
       return {
         accessToken
       }
-} 
+}
+
+const forgetPassword = async(userId: string) => {
+
+    // Check the user is exists in database
+    const user = await User.findOne({id: userId});
+    if(!user){
+        throw new AppError(httpStatus.NOT_FOUND, 'This user not found!')
+    }
+
+    // Check the user is already delete or not
+    const isUserDelete = user?.isDeleted;
+    if(isUserDelete === true){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is already deleted!')
+    }
+
+    // Check the user is block or active
+    const userStatus = user?.status;
+    if(userStatus === 'blocked'){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!')
+    }
+
+    const jwtPayload = {
+        userId: user?.id,
+        role: user?.role
+    }
+
+ 
+    
+    const resetToken = createAccessOrRefreshToken(jwtPayload, config.jwt_access_secret_token as string, '10m');
+
+    const passwordResetLink = `http://localhost:5173?id=${user?.id}&token=${resetToken}`;
+    console.log(passwordResetLink);
+
+    return {};
+}
 
 export const AuthServices = {
     loginUser,
     changeUserPassword,
-    refreshToken
+    refreshToken,
+    forgetPassword
 }

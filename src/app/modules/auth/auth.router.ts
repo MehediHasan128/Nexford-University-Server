@@ -16,4 +16,6 @@ router.post('/change-password', auth(userRole.admin, userRole.faculty, userRole.
 
 router.post('/refresh-token', validateRequest(AuthValidation.refreshTokenValidationSchema), AuthController.refreshToken);
 
+router.post('/forget-password', validateRequest(AuthValidation.forgetPasswordValidationSchema), AuthController.forgetUserPassword);
+
 export const AuthRoutes = router;
