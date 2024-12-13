@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from "../../config";
 import { createAccessOrRefreshToken } from "./auth.utils";
-import { sendEmail } from "../../utils/sendEmail";
+// import { sendEmail } from "../../utils/sendEmail";
 
 const loginUser = async(payload: TUserLogin) => {
     // Check the user is exists on database
@@ -145,14 +145,52 @@ const forgetPassword = async(userId: string) => {
 
     const passwordResetLink = `${config.reset_password_ui_link}?id=${user?.id}&token=${resetToken}`;
 
-    sendEmail(user?.email, passwordResetLink);
+    // sendEmail(user?.email, passwordResetLink);
 
-    return {};
+    return {
+        passwordResetLink
+    };
+}
+
+const resetPassword = async(payload: {id: string, newPassword: string}, token: string) => {
+    // Check the user is exists in database
+    const user = await User.findOne({id: payload.id});
+    console.log(user);
+    if(!user){
+        throw new AppError(httpStatus.NOT_FOUND, 'This user not found!')
+    }
+
+    // Check the user is already delete or not
+    const isUserDelete = user?.isDeleted;
+    if(isUserDelete === true){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is already deleted!')
+    }
+
+    // Check the user is block or active
+    const userStatus = user?.status;
+    if(userStatus === 'blocked'){
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!')
+    }
+
+    const decoded = jwt.verify(
+        token,
+        config.jwt_access_secret_token as string,
+      ) as JwtPayload;
+
+      if(decoded.userId !== payload.id){
+        throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden')
+      }
+
+    const resetPassword = await bcrypt.hash(payload?.newPassword, Number(config.bcrypt_salt_round));
+
+
+    await User.findOneAndUpdate({id: payload?.id}, {password: resetPassword}, {new: true});
 }
 
 export const AuthServices = {
     loginUser,
     changeUserPassword,
     refreshToken,
-    forgetPassword
+    forgetPassword,
+    resetPassword
 }
