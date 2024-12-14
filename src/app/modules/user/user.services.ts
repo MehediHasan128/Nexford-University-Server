@@ -191,17 +191,25 @@ const createAdminUserIntoDB = async (password: string, payload: TAdmin) => {
   }
 };
 
-const getMyInformationFromDB = async(userId: string, token: string) => {
-
-  const decoded = jwt.verify(token, config.jwt_access_secret_token as string) as JwtPayload;
+const getMyInformationFromDB = async(userId: string, payload: JwtPayload) => {
   
-  const decodedUserId = decoded.userId;
+  const {userId: decodedUserId, role} = payload;
 
   if(decodedUserId !== userId){
     throw new AppError(httpStatus.UNAUTHORIZED, `Tou are not authorized person to access ${userId} user information`)
   }
 
-  const data = await Student.findOne({id: userId});
+  let data = null;
+
+  if(role === 'student'){
+    data = await Student.findOne({id: userId});
+  }
+  if(role === 'faculty'){
+    data = await Faculty.findOne({id: userId});
+  }
+  if(role === 'admin'){
+    data = await Admin.findOne({id: userId});
+  }
 
   return data;
 }

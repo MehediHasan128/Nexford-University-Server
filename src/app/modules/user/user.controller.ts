@@ -44,8 +44,7 @@ const createAdminUSer = catchAsync(async (req, res) => {
 
 const getMyInformation = catchAsync(async (req, res) => {
   const {userId} = req.params;
-  const {authorization} = req.headers;
-  const result = await UserServices.getMyInformationFromDB(userId, authorization as string);
+  const result = await UserServices.getMyInformationFromDB(userId, req.user);
 
   sendResponse(res, {
     success: true,
