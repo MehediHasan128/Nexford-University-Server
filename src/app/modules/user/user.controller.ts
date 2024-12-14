@@ -42,8 +42,22 @@ const createAdminUSer = catchAsync(async (req, res) => {
   });
 });
 
+const getMyInformation = catchAsync(async (req, res) => {
+  const {userId} = req.params;
+  const {authorization} = req.headers;
+  const result = await UserServices.getMyInformationFromDB(userId, authorization as string);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Successfully get your information',
+    data: result,
+  });
+});
+
 export const UserController = {
   createStudentUser,
   createFacultyUser,
   createAdminUSer,
+  getMyInformation
 };

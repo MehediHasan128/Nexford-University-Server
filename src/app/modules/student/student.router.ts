@@ -13,7 +13,7 @@ router.get(
 );
 
 // Get single student
-router.get('/:studentId', StudentController.getSingleStudent);
+router.get('/:studentId', auth(userRole.student), StudentController.getSingleStudent);
 
 // Update student
 router.patch('/:studentId', StudentController.updateStudent);

@@ -19,6 +19,7 @@ import { AcademicDepartment } from '../academicDepartment/academicDepartment.mod
 import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
   // Create a user object
@@ -190,8 +191,24 @@ const createAdminUserIntoDB = async (password: string, payload: TAdmin) => {
   }
 };
 
+const getMyInformationFromDB = async(userId: string, token: string) => {
+
+  const decoded = jwt.verify(token, config.jwt_access_secret_token as string) as JwtPayload;
+  
+  const decodedUserId = decoded.userId;
+
+  if(decodedUserId !== userId){
+    throw new AppError(httpStatus.UNAUTHORIZED, `Tou are not authorized person to access ${userId} user information`)
+  }
+
+  const data = await Student.findOne({id: userId});
+
+  return data;
+}
+
 export const UserServices = {
   createStudentUserIntoDB,
   createFacultyUserIntoDB,
   createAdminUserIntoDB,
+  getMyInformationFromDB
 };
