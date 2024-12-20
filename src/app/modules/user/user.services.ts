@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import config from '../../config';
 import { User } from './user.model';
 import httpStatus from 'http-status';
@@ -19,9 +20,10 @@ import { AcademicDepartment } from '../academicDepartment/academicDepartment.mod
 import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
+const createStudentUserIntoDB = async (password: string, payload: TStudent, file: any) => {
   // Create a user object
   const userData: Partial<TUser> = {};
 
@@ -55,10 +57,15 @@ const createStudentUserIntoDB = async (password: string, payload: TStudent) => {
       departmentIdString,
     );
 
+    // Send image to cloudinary
+    const imageName = `${userData?.id}${payload?.name?.firstName}`
+    const uploadImage = await sendImageToCloudinary(file?.path, imageName);
+    payload.profileImage = uploadImage!.secure_url;
+
     // Create user into DB
     const newUser = await User.create([userData], { session });
 
-    // Create a student (transaction-1)
+    // // Create a student (transaction-1)
     if (!newUser.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Faild to create user');
     }

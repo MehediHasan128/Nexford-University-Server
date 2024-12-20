@@ -49,6 +49,7 @@ const createStudentSchema = new Schema<TStudent, TStudentModel>(
     permanentAddress: { type: String, required: true },
     guardian: guardianSchema,
     localGuardian: localGuardianSchema,
+    profileImage: { type: String },
     addmistionSemester: { type: Schema.Types.ObjectId, required: [true, 'Addmission Smester is required'], ref: 'AcademicSemester' },
     academicDepartment: { type: Schema.Types.ObjectId, required: [true, 'Academic Department is required'], ref: 'department' },
     isDeleted: { type: Boolean, default: false }

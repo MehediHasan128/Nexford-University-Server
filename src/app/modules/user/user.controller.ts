@@ -8,6 +8,7 @@ const createStudentUser = catchAsync(async (req, res) => {
   const result = await UserServices.createStudentUserIntoDB(
     password,
     studentData,
+    req.file
   );
   sendResponse(res, {
     success: true,
