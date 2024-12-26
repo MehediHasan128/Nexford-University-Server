@@ -19,6 +19,7 @@ export type TFaculty = {
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
   presentAddress: string;
   permanentAddress: string;
+  profileImage: string;
   academicDepartment: Types.ObjectId;
   isDeleted: boolean;
 };
