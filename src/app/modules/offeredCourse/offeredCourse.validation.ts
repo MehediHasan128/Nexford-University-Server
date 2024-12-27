@@ -30,7 +30,7 @@ const createOfferedCourseValidationSchema = z.object({
       .min(1, { message: 'Section cannot be empty.' })
       .trim(),
 
-    studentCapacity: z
+      maxCapacity: z
       .number({
         required_error: 'Student capacity is required.',
       })
@@ -76,7 +76,7 @@ const updateOfferedCourseValidationSchema = z.object({
 
     section: z.string().optional(),
 
-    studentCapacity: z.number().optional(),
+    maxCapacity: z.number().optional(),
 
     classSchedule: z.array(
       z.enum([...days] as [string, ...string[]], {
